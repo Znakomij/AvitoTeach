@@ -13,8 +13,19 @@ func main() {
 	} else {
 		fmt.Println("Good!!!")
 	}
+	defer conn.Close()
 
 	_, err = conn.Do("SET", "na", "new_value")
-	value, err := redis.String(conn.Do("MGET", "na", "key"))
-	fmt.Println(value)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	value, err := redis.String(conn.Do("GET", "na"))
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Printf("%#v\n", value)
+		return
+	}
+
 }
