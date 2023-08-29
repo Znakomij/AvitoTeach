@@ -20,12 +20,15 @@ func main() {
 		fmt.Println(err)
 	}
 
-	value, err := redis.String(conn.Do("GET", "na"))
+	value, err := redis.String(conn.Do("GET", "nandndndn"))
 	if err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Printf("%#v\n", value)
-		return
 	}
 
+	conn.Do("DEL", "naasdce")
+	if err != nil {
+		fmt.Println(err)
+	}
 }
