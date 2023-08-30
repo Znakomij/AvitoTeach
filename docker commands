@@ -1,0 +1,6 @@
+REDIS:
+docker build ./redis/ -t my_redis
+docker run -d -p 6379:6379 --name redis my_redis
+docker exec redis redis-cli CONFIG SET protected-mode no
+
+GO-APP:

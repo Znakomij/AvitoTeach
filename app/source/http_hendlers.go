@@ -14,6 +14,7 @@ func setKey(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	// Parsing the request body
 	reg, err := regexp.Compile("[^a-zA-Z0-9:]+")
 	if err != nil {
 		panic(err)
@@ -26,7 +27,10 @@ func setKey(w http.ResponseWriter, r *http.Request) {
 	_, err = conn.Do("SET", key, value)
 	if err != nil {
 		panic(err)
+	} else {
+		w.Write([]byte(key + " : " + value + " successfully set"))
 	}
+
 	conn.Close()
 }
 
@@ -58,10 +62,12 @@ func delKey(w http.ResponseWriter, r *http.Request) {
 	resultString := reg.ReplaceAllString(string(body), "")
 	key := strings.Split(resultString, ":")[1]
 
-	conn, err := redis.Dial("tcp", "localhost:6379")
+	conn, err := redis.Dial("tcp", "0.0.0.0:6379")
 	conn.Do("DEL", key)
 	if err != nil {
 		panic(err)
+	} else {
+		w.Write([]byte("successfully deleted"))
 	}
 	conn.Close()
 }
@@ -69,17 +75,4 @@ func delKey(w http.ResponseWriter, r *http.Request) {
 func other(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusForbidden)
 	w.Write([]byte("403 тута"))
-}
-
-func main() {
-
-	http.HandleFunc("/set_key", setKey)
-	http.HandleFunc("/get_key", getKey)
-	http.HandleFunc("/del_key", delKey)
-	http.HandleFunc("/", other)
-
-	err := http.ListenAndServe(":8089", nil)
-	if err != nil {
-		panic(err)
-	}
 }
