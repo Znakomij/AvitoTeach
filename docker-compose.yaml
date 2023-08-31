@@ -2,18 +2,25 @@ version: "3.3"
 
 services:
   redis:
+    build: ./redis
+    container_name: my_redis
     image: my_redis
+    command: ["redis-server", "--protected-mode", "no"]
 
   go-app:
+    build: ./app -t go-app
+    container_name: go-app
     image: go-app
     ports:
-    -   8089:8089
+      - 8089:8089
     links:
-    -   redis
+      - redis
 
   nginx:
+    build: ./nginx
+    container_name: my_nginx
     image: my_nginx
     ports:
-    -   80:80
+      - 80:80
     links:
-    -   go-app
+      - go-app
