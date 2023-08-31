@@ -4,3 +4,9 @@ docker run -d -p 6379:6379 --name redis my_redis
 docker exec redis redis-cli CONFIG SET protected-mode no
 
 GO-APP:
+docker build ./app -t go-app
+docker run -d -p 8089:8089 --name go-app --link redis:redis go-app
+
+NGINX:
+docker build ./nginx -t my_nginx
+docker run -d -p 80:80 --name nginx --link go-app:go-app my_nginx

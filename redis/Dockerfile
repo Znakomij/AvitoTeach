@@ -6,4 +6,4 @@ RUN apt-get install -y redis-server
 EXPOSE 6379/tcp
 WORKDIR /data
 
-ENTRYPOINT ["redis-server"]
+RUN ["redis-server"]
