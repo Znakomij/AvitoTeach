@@ -7,11 +7,15 @@ RUN apt-get update && apt-get upgrade && \
 ENV PATH /usr/local/go/bin:$PATH
 ENV GOPATH /go
 
-WORKDIR /app
+WORKDIR /usr/local/app
 COPY source/go.mod source/go.sum ./
 RUN go mod download
 COPY /source/*.go ./
 RUN go build -o app-go .
 
+FROM debian:11-slim
+
+COPY --from=builder /usr/local/app/app-go /
+
 EXPOSE 8089:8089 6379:6379
-CMD ["./app-go"]
+CMD ["/app-go"]
